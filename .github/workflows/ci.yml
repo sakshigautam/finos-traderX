@@ -16,6 +16,8 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+        working-directory: ./web-front-end/angular
 
       - name: Run Linter
         run: npm run lint
+        working-directory: ./web-front-end/angular
