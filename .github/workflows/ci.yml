@@ -19,5 +19,5 @@ jobs:
         working-directory: ./web-front-end/angular
 
       - name: Run Linter
-        run: npm run lint
+        run: ng lint
         working-directory: ./web-front-end/angular
