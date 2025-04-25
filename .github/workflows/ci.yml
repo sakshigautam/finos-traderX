@@ -15,9 +15,9 @@ jobs:
           node-version: '18' # Match with your .nvmrc or package.json engines
 
       - name: Install dependencies
-        run: npm install
+        run: npm install tslint --save-dev
         working-directory: ./web-front-end/angular
 
       - name: Run Linter
-        run: ng lint
+        run: npm run lint
         working-directory: ./web-front-end/angular
