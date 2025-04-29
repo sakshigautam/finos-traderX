@@ -1,6 +1,9 @@
 plugins {
     id "org.sonarqube" version "6.0.1.5171"
+
 }
+
+
 
 allprojects {
     repositories {
@@ -8,11 +11,13 @@ allprojects {
     }
 }
 
-sonar {
-    properties {
-        property "sonar.projectKey", "Finos_TradeX"
-        property "sonar.host.url", "http://localhost:9000"  // Or use SonarCloud URL
-        property "sonar.login", "sqa_86f18a5202e4580a22f90076f48569a9c037b25c"
-        property "sonar.sourceEncoding", "UTF-8"
+if (project.hasProperty("runSonar") && project.runSonar == "true") {
+    sonarqube {
+        properties {
+            property "sonar.projectKey", "Finos_TradeX"
+            property "sonar.host.url", "http://localhost:9000"
+            property "sonar.login", "sqa_86f18a5202e4580a22f90076f48569a9c037b25c"
+            property "sonar.sourceEncoding", "UTF-8"
+        }
     }
 }
