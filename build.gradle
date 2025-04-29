@@ -11,7 +11,7 @@ allprojects {
     }
 }
 
-if (project.hasProperty("runSonar") && project.runSonar == "true") {
+
     sonarqube {
         properties {
             property "sonar.projectKey", "Finos_TradeX"
@@ -20,4 +20,4 @@ if (project.hasProperty("runSonar") && project.runSonar == "true") {
             property "sonar.sourceEncoding", "UTF-8"
         }
     }
-}
+
