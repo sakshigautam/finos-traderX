@@ -1,0 +1,26 @@
+name: Dynamic Folder Processing
+
+on:
+  workflow_dispatch:
+    inputs:
+      folder:
+        description: 'Folder name (or "auto" to list all top-level folders)'
+        required: true
+        default: 'All_Services'
+
+jobs:
+  list-folders:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: List folders or use input
+        run: |
+          if [ "${{ github.event.inputs.folder }}" = "auto" ]; then
+            echo "Listing top-level folders:"
+            find . -maxdepth 1 -type d ! -name '.git' ! -name '.' -exec basename {} \;
+          else
+            echo "Using provided folder: ${{ github.event.inputs.folder }}"
+            # You can add validation or processing logic here
+          fi
