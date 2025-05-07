@@ -1,0 +1,36 @@
+name: Infrastructure Provisioning
+on: push
+env:
+      AWS_REGION: us-west-2  # Change to your desired AWS region
+      CLUSTER_NAME: my-eks-cluster  # Customize cluster name
+jobs:
+  provision-eks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS Credentials
+          uses: aws-actions/configure-aws-credentials@v1
+          with:
+            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws-region: ${{ env.AWS_REGION }}
+      - name: Install eksctl
+          run: |
+            curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+            sudo mv /tmp/eksctl /usr/local/bin
+      - name: Create EKS Cluster
+          run: |
+            eksctl create cluster \
+            --name $CLUSTER_NAME \
+            --region $AWS_REGION \
+            --nodegroup-name standard-workers \
+            --node-type t3.medium \
+            --nodes 2 \
+            --nodes-min 1 \
+            --nodes-max 3 \
+            --managed
+      - name: Verify EKS Cluster
+          run: |
+            aws eks update-kubeconfig --name $CLUSTER_NAME --region $AWS_REGION
+            kubectl get pods
+
+ 
