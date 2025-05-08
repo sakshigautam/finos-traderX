@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: database
-        image: sakshi19091998/database:50
+        image: sakshi19091998/database:70
         ports:
         - containerPort: 18082
         - containerPort: 18083
