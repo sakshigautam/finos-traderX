@@ -13,4 +13,4 @@ EXPOSE 18084
 
 RUN ./gradlew build
 RUN chmod +x ./run.sh
-ENTRYPOINT ./run.sh 
+ENTRYPOINT ["./run.sh"]
