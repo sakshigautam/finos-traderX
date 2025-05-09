@@ -3,11 +3,13 @@ on:
   workflow_dispatch:
 
 env:
-  AWS_REGION: us-east-1  # Change to your desired AWS region
-  CLUSTER_NAME: my-eks-cluster  # Customize cluster name
+  AWS_REGION: us-east-1
+  INSTANCE_TYPE: t3.medium
+  KEY_NAME: PrometheusKey
+  AMI_ID: ami-0f88e80871fd81e91
 
 jobs:
-  provision-eks:
+  provision-ec2:
     runs-on: ubuntu-latest
 
     steps:
@@ -18,25 +20,36 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Install eksctl
+      - name: Get Default Subnet ID
+        id: get_subnet
         run: |
-          curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
-          sudo mv /tmp/eksctl /usr/local/bin
+          SUBNET_ID=$(aws ec2 describe-subnets \
+            --filters "Name=default-for-az,Values=true" \
+            --query "Subnets[0].SubnetId" \
+            --output text)
+          echo "SUBNET_ID=$SUBNET_ID" >> $GITHUB_ENV
 
-      - name: Create EKS Cluster
+      - name: Get Default Security Group ID
+        id: get_sg
         run: |
-          eksctl create cluster \
-            --name $CLUSTER_NAME \
-            --region $AWS_REGION \
-            --nodegroup-name standard-workers \
-            --node-type t3.medium \
-            --nodes 2 \
-            --nodes-min 1 \
-            --nodes-max 3 \
-            --managed
+          VPC_ID=$(aws ec2 describe-vpcs \
+            --filters Name=isDefault,Values=true \
+            --query "Vpcs[0].VpcId" \
+            --output text)
+          SG_ID=$(aws ec2 describe-security-groups \
+            --filters Name=vpc-id,Values=$VPC_ID Name=group-name,Values=default \
+            --query "SecurityGroups[0].GroupId" \
+            --output text)
+          echo "SECURITY_GROUP_ID=$SG_ID" >> $GITHUB_ENV
 
-      - name: Verify EKS Cluster
+
+      - name: Launch EC2 Instance
         run: |
-          aws eks update-kubeconfig --name $CLUSTER_NAME --region $AWS_REGION
-          kubectl get pods
- 
+          aws ec2 run-instances \
+            --image-id $AMI_ID \
+            --instance-type ${{ env.INSTANCE_TYPE }} \
+            --key-name ${{ env.KEY_NAME }} \
+            --security-group-ids ${{ env.SECURITY_GROUP_ID }} \
+            --subnet-id ${{ env.SUBNET_ID }} \
+            --count 1 \
+            --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=GitHubActions-EC2}]'
