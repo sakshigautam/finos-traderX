@@ -6,7 +6,7 @@ metadata:
   labels:
     app: database
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: database
@@ -16,24 +16,13 @@ spec:
         app: database
     spec:
       containers:
-      - name: database
+      - name: database-app
         image: sakshi19091998/database:70
+        imagePullPolicy: IfNotPresent
         ports:
-        - containerPort: 18082
-        - containerPort: 18083
-        - containerPort: 18084
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: database-service
-  namespace: flux-system
-spec:
-  selector:
-    app: database
-  type: NodePort
-  ports:
-  - protocol: TCP
-    port: 18084           # Port the service exposes
-    targetPort: 18084     # Port in the container
-    nodePort: 30084       # Port on the node (accessible via localhost)
+          - containerPort: 18082
+            protocol: TCP
+          - containerPort: 18083
+            protocol: TCP
+          - containerPort: 18084
+            protocol: TCP
