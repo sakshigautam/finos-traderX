@@ -32,3 +32,24 @@ jobs:
             --subnet-id $SUBNET_ID \
             --count 1 \
             --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=GitHubActions-EC2}]'
+
+      - name: Get Private IP Address of EC2 Instance
+        id: get_private_ip
+        run: |
+          PRIVATE_IP=$(aws ec2 describe-instances \
+            --instance-ids ${{ env.INSTANCE_ID }} \
+            --query "Reservations[0].Instances[0].PrivateIpAddress" \
+            --output text)
+          echo "PRIVATE_IP=$PRIVATE_IP" >> $GITHUB_ENV
+          echo "Private IP of the EC2 instance: $PRIVATE_IP"
+            
+       - name: Install Python and Ansible
+         run: |
+           sudo yum install -y python3
+           sudo yum install -y ansible
+           vi /etc/
+
+     
+           
+       
+          
