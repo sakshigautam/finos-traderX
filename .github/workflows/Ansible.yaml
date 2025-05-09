@@ -3,10 +3,12 @@ on:
   workflow_dispatch:
 
 env:
-  AWS_REGION: us-east-1
+  AWS_REGION: us-east-1  
   INSTANCE_TYPE: t3.medium
+  AMI_ID: ami-0c02fb55956c7d316
   KEY_NAME: PrometheusKey
-  AMI_ID: ami-0f88e80871fd81e91
+  SECURITY_GROUP_ID: sg-06eff5f4c6f6e5e10
+  SUBNET_ID: subnet-068c08d255894fbae
 
 jobs:
   provision-ec2:
@@ -20,36 +22,13 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Get Default Subnet ID
-        id: get_subnet
-        run: |
-          SUBNET_ID=$(aws ec2 describe-subnets \
-            --filters "Name=default-for-az,Values=true" \
-            --query "Subnets[0].SubnetId" \
-            --output text)
-          echo "SUBNET_ID=$SUBNET_ID" >> $GITHUB_ENV
-
-      - name: Get Default Security Group ID
-        id: get_sg
-        run: |
-          VPC_ID=$(aws ec2 describe-vpcs \
-            --filters Name=isDefault,Values=true \
-            --query "Vpcs[0].VpcId" \
-            --output text)
-          SG_ID=$(aws ec2 describe-security-groups \
-            --filters Name=vpc-id,Values=$VPC_ID Name=group-name,Values=default \
-            --query "SecurityGroups[0].GroupId" \
-            --output text)
-          echo "SECURITY_GROUP_ID=$SG_ID" >> $GITHUB_ENV
-
-
       - name: Launch EC2 Instance
         run: |
           aws ec2 run-instances \
             --image-id $AMI_ID \
-            --instance-type ${{ env.INSTANCE_TYPE }} \
-            --key-name ${{ env.KEY_NAME }} \
-            --security-group-ids ${{ env.SECURITY_GROUP_ID }} \
-            --subnet-id ${{ env.SUBNET_ID }} \
+            --instance-type $INSTANCE_TYPE \
+            --key-name $KEY_NAME \
+            --security-group-ids $SECURITY_GROUP_ID \
+            --subnet-id $SUBNET_ID \
             --count 1 \
             --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=GitHubActions-EC2}]'
