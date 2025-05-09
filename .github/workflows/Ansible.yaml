@@ -1,7 +1,7 @@
 name: Infrastructure Provisioning
 on: push
 env:
-      AWS_REGION: us-west-2  # Change to your desired AWS region
+      AWS_REGION: us-east-1  # Change to your desired AWS region
       CLUSTER_NAME: my-eks-cluster  # Customize cluster name
 jobs:
   provision-eks:
