@@ -1,5 +1,5 @@
 name: Infrastructure Provisioning
-on: push
+on: workflow_dispatch
 env:
       AWS_REGION: us-east-1  # Change to your desired AWS region
       CLUSTER_NAME: my-eks-cluster  # Customize cluster name
