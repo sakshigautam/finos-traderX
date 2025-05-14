@@ -4,8 +4,13 @@ on:
   workflow_dispatch:
     inputs:
       services:
-        type: boolean
-        default: true
+        description: "Enter service name"
+        options:
+          - service1
+          - service2
+          - service3
+        type: choice
+        default: service1
 
 jobs:
   echo-data:
