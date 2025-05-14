@@ -5,11 +5,7 @@ on:
     inputs:
       services:
         description: "Enter service name"
-        options:
-          - service1
-          - service2
-          - service3
-        type: choice
+        type: string
         default: service1
 
 jobs:
