@@ -1,0 +1,15 @@
+# .minikube/blue-workloads.yaml
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: blue-workloads
+  namespace: flux-system
+spec:
+  interval: 1m
+  path: ./apps/blue     # 👈 Points to blue environment folder
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  timeout: 1m
+  validation: client
