@@ -7,8 +7,5 @@ spec:
   interval: 1m
   path: ./apps/blue
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
   timeout: 1m
 
