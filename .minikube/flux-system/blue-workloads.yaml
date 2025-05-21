@@ -11,5 +11,4 @@ spec:
     kind: GitRepository
     name: flux-system
   timeout: 1m
-  validation: client
 
