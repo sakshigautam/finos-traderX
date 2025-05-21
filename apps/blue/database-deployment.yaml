@@ -1,3 +1,4 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -6,7 +7,7 @@ metadata:
   labels:
     app: database
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: database
@@ -26,3 +27,40 @@ spec:
             protocol: TCP
           - containerPort: 18084
             protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: database
+  namespace: flux-system
+  labels:
+    app: database
+spec:
+  selector:
+    app: database
+  ports:
+    - name: http
+      port: 18084
+      targetPort: 18084
+      protocol: TCP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: database-ingress
+  namespace: flux-system
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: localhost
+      http:
+        paths:
+        - path: /db-web(/|$)(.*)
+          pathType: Prefix
+          backend:
+            service:
+              name: database
+              port:
+                number: 18084
