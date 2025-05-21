@@ -5,7 +5,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 1m
-  path: finos-traderX/apps/blue/kustomization.yaml
+  path: ./apps/blue
   prune: true
   sourceRef:
     kind: GitRepository
