@@ -6,7 +6,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 1m
-  path: ./apps/blue     # 👈 Points to blue environment folder
+  path: finos-traderX/apps/blue     # 👈 Points to blue environment folder
   prune: true
   sourceRef:
     kind: GitRepository
