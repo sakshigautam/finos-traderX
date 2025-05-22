@@ -40,7 +40,7 @@ spec:
     app: database
   ports:
     - name: http
-      port: 18084
+      port: 80
       targetPort: 18084
       protocol: TCP
 ---
