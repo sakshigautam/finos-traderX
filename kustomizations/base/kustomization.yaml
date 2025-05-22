@@ -1,1 +1,4 @@
-
+resources:
+  - database-deployment.yaml
+  - service.yaml
+  - ingress.yaml
