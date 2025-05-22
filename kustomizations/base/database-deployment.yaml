@@ -1,1 +1,27 @@
-
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: database
+  labels:
+    app: database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: database
+  template:
+    metadata:
+      labels:
+        app: database
+    spec:
+      containers:
+      - name: database-app
+        image: kirtigupta1234/github-flux-database:latest-1746793385
+        imagePullPolicy: IfNotPresent
+        ports:
+          - containerPort: 18082
+            protocol: TCP
+          - containerPort: 18083
+            protocol: TCP
+          - containerPort: 18084
+            protocol: TCP
