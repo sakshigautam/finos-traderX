@@ -1,1 +1,19 @@
-
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: database-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: localhost
+      http:
+        paths:
+          - path: /db-web(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: database
+                port:
+                  number: 18084
