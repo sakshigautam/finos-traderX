@@ -4,5 +4,5 @@ resources:
   - ../../kustomizations/base
 
 patchesStrategicMerge:
-  - patch-blue.yaml   # 👈 Switch to blue
-# - patch-green.yaml  # 👈 Switch to green
+  - patch-blue.yaml   # Switch to blue
+# - patch-green.yaml  # Switch to green
