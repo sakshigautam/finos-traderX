@@ -1,7 +1,7 @@
 namespace: flux-system
 
 resources:
-  - ./kustomizations/base
+  - ../../kustomizations/base
 
 patchesStrategicMerge:
   - patch.yaml
