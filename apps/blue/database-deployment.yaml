@@ -40,7 +40,7 @@ spec:
     app: database
   ports:
     - name: http
-      port: 80
+      port: 18084
       targetPort: 18084
       protocol: TCP
 ---
@@ -54,7 +54,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: db.local
+    - host: localhost
       http:
         paths:
         - path: /db-web(/|$)(.*)
@@ -63,4 +63,4 @@ spec:
             service:
               name: database
               port:
-                number: 80
+                number: 18084
