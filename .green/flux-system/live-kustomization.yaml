@@ -1,1 +1,13 @@
-
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: live
+  namespace: flux-system
+spec:
+  interval: 1m
+  path: ./overlays/live       # ✅ must point to correct folder from Git repo root
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  targetNamespace: flux-system
