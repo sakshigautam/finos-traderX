@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: database-ingress
+  namespace: flux-system
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: localhost
+      http:
+        paths:
+        - path: /db-web(/|$)(.*)
+          pathType: Prefix
+          backend:
+            service:
+              name: database-blue
+              port:
+                number: 18084
