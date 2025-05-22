@@ -20,20 +20,3 @@ spec:
   selector:
     app: database
     version: green
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: database-ingress
-spec:
-  rules:
-    - host: localhost
-      http:
-        paths:
-          - path: /db-web(/|$)(.*)
-            pathType: Prefix
-            backend:
-              service:
-                name: database
-                port:
-                  number: 18084
