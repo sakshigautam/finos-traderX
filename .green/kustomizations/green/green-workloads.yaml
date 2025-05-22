@@ -5,7 +5,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 1m
-  path: ./apps/green
+  path: ./overlays/green
   prune: true
   sourceRef:
     kind: GitRepository
